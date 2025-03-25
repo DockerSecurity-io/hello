@@ -10,6 +10,7 @@
 
 # Create a stage for resolving and downloading dependencies.
 FROM sapmachine:24-jdk-ubuntu-noble as deps
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 WORKDIR /build
 
@@ -32,6 +33,7 @@ RUN --mount=type=bind,source=pom.xml,target=pom.xml \
 # stage with the correct filename of your package and update the base image of the "final" stage
 # use the relevant app server, e.g., using tomcat (https://hub.docker.com/_/tomcat/) as a base image.
 FROM deps as package
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 WORKDIR /build
 
@@ -49,6 +51,7 @@ RUN --mount=type=bind,source=pom.xml,target=pom.xml \
 # See Spring's docs for reference:
 # https://docs.spring.io/spring-boot/docs/current/reference/html/container-images.html
 FROM package as extract
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
 WORKDIR /build
 
